@@ -28,9 +28,8 @@ typedef struct
 	
 }Timer_Init;
 
-void TIMER_init(Timer_Init * timx,void (*Call)(void));
+void TIMER_init(Timer_Init * timx);
 void TIMER_start(Timer_Num,Timer_Type);
 void TIMER_stop(Timer_Num,Timer_Type);
-void exp_timer(void);
 
 #endif

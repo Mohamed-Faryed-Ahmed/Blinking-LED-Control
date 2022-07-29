@@ -1,19 +1,8 @@
 #include "timer.h"
-#include "../../common/reg.h"
-#include "../mcal/int/int.h"
- 
+#include "../../common/reg.h" 
 
-volatile uint32_t ticks = 0;
 
-void static (*timerCall)(void);
-
-void exp_timer(void)
-{
-	ticks ++;
-	timerCall();
-}
-
-void TIMER_init(Timer_Init* timx,void (*Call)(void))
+void TIMER_init(Timer_Init* timx)
 {
 	int delay=5;
 	if(timx->t_num == T0)
@@ -37,11 +26,8 @@ void TIMER_init(Timer_Init* timx,void (*Call)(void))
 			}
 			TIMER0_APR  = 0x000000FF & 0xFF; /* prescaler is  256 */
 			TIMER0_AILR = 3036;              /*Load the start value into (GPTMTnILR).*/
-			TIMER0_IM =0x01;                 /*setGPTM Interrupt Mask (GPTMIMR).*/
 		}
 	}
-	TIMER0A_VECT = (uint32_t)exp_timer;   /*address of interrupt handler*/
-	timerCall= Call;                      /*address of call back from user*/
 }
 
 void TIMER_start(Timer_Num num,Timer_Type type)
@@ -64,6 +50,6 @@ void TIMER_stop(Timer_Num num,Timer_Type type)
 	}  
   else if(num == T0 && type == TB)
 	{
-		TIMER0_CTL=0xFFFFFF7F;                        /* disable timer0 B  */
+		TIMER0_CTL=0xFFFFFF7F;                          /* disable timer0 B  */
 	}
 }

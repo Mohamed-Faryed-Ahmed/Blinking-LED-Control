@@ -140,9 +140,11 @@ void DIO_pinSetting(Port_Num port_num ,Pin_Num pin_num ,DIO_Status status ,DIO_D
 		GPIO_HBCTL |= 0x00000020;
 	  CLOCK_PORT |= 0x00000020;
 	  delay = delay+5;
+		PORTF_LOCK   = 0x4C4F434B ;
+	  PORTF_CR    |= (1<<pin_num);
 			if(dir == OUTPUT)
 			{
-				PORTF_DIR   &= (1<<pin_num);
+				PORTF_DIR   |= (1<<pin_num);
 			}
 			else if(dir == INPUT)
 			{
@@ -159,10 +161,8 @@ void DIO_pinSetting(Port_Num port_num ,Pin_Num pin_num ,DIO_Status status ,DIO_D
 			PORTF_PDR   |= (1<<pin_num);
 		}
 	  PORTF_EN    |= (1<<pin_num);
-	  PORTF_PCTL  &= (1<<pin_num);
+	  PORTF_PCTL  &= ~(1<<(4*pin_num));
 	  PORTF_AMSEL &= ~(1<<pin_num);
-	  PORTF_LOCK   = 0x4C4F434B ;
-	  PORTF_CR    |= (1<<pin_num);
 	}
 	else if(port_num == PORTE )
 	{
@@ -187,8 +187,8 @@ void DIO_pinSetting(Port_Num port_num ,Pin_Num pin_num ,DIO_Status status ,DIO_D
 		{
 			PORTE_PDR   |= (1<<pin_num);
 		}
-	  PORTE_EN    |= (1<<pin_num);
-	  PORTE_PCTL  &= (1<<pin_num);
+	  PORTE_EN    |=  (1<<4*pin_num);
+	  PORTE_PCTL  &= ~(1<<pin_num);
 	  PORTE_AMSEL &= ~(1<<pin_num);
 	  PORTE_LOCK   = 0x4C4F434B ;
 	  PORTE_CR    |= (1<<pin_num);
@@ -349,429 +349,79 @@ uint8_t DIO_portRead(Port_Num port_num)
 
 void DIO_pinWrite(Port_Num port_num,Pin_Num pin_num,Status state)
 {
-	if(port_num == PORTA)
+		switch(port_num)
 	{
-		if(pin_num == PIN0)
-		{
-			PA_0 = state;
-		}
-		else if(pin_num == PIN1)
-		{
-			PA_1 = state;
-		}
-		else if(pin_num == PIN2)
-		{
-			PA_2 = state;
-		}
-		else if(pin_num == PIN3)
-		{
-			PA_3 = state;
-		}
-		else if(pin_num == PIN4)
-		{
-			PA_4 = state;
-		}
-		else if(pin_num == PIN5)
-		{
-			PA_5 = state;
-		}
-		else if(pin_num == PIN6)
-		{
-			PA_6 = state;
-		}
-		else if(pin_num == PIN7)
-		{
-			PA_7 = state;
-		}
-	}
-	else if(port_num == PORTF)
-	{
-		if(pin_num == PIN0)
-		{
-			PF_0 = state;
-		}
-		else if(pin_num == PIN1)
-		{
-			PF_1 = state;
-		}
-		else if(pin_num == PIN2)
-		{
-			PF_2 = state;
-		}
-		else if(pin_num == PIN3)
-		{
-			PF_3 = state;
-		}
-		else if(pin_num == PIN4)
-		{
-			PF_4 = state;
-		}
-		else if(pin_num == PIN5)
-		{
-			PF_5 = state;
-		}
-		else if(pin_num == PIN6)
-		{
-			PF_6 = state;
-		}
-		else if(pin_num == PIN7)
-		{
-			PF_7 = state;
-		}
-	}
-	else if(port_num == PORTB)
-	{
-		if(pin_num == PIN0)
-		{
-			PB_0 = state;
-		}
-		else if(pin_num == PIN1)
-		{
-			PB_1 = state;
-		}
-		else if(pin_num == PIN2)
-		{
-			PB_2 = state;
-		}
-		else if(pin_num == PIN3)
-		{
-			PB_3 = state;
-		}
-		else if(pin_num == PIN4)
-		{
-			PB_4 = state;
-		}
-		else if(pin_num == PIN5)
-		{
-			PB_5 = state;
-		}
-		else if(pin_num == PIN6)
-		{
-			PB_6 = state;
-		}
-		else if(pin_num == PIN7)
-		{
-			PB_7 = state;
-		}
-	}
-	else if(port_num == PORTC)
-	{
-		if(pin_num == PIN0)
-		{
-			PC_0 = state;
-		}
-		else if(pin_num == PIN1)
-		{
-			PC_1 = state;
-		}
-		else if(pin_num == PIN2)
-		{
-			PC_2 = state;
-		}
-		else if(pin_num == PIN3)
-		{
-			PC_3 = state;
-		}
-		else if(pin_num == PIN4)
-		{
-			PC_4 = state;
-		}
-		else if(pin_num == PIN5)
-		{
-			PC_5 = state;
-		}
-		else if(pin_num == PIN6)
-		{
-			PC_6 = state;
-		}
-		else if(pin_num == PIN7)
-		{
-			PC_7 = state;
-		}
-	}
-	else if(port_num == PORTD)
-	{
-		if(pin_num == PIN0)
-		{
-			PD_0 = state;
-		}
-		else if(pin_num == PIN1)
-		{
-			PD_1 = state;
-		}
-		else if(pin_num == PIN2)
-		{
-			PD_2 = state;
-		}
-		else if(pin_num == PIN3)
-		{
-			PD_3 = state;
-		}
-		else if(pin_num == PIN4)
-		{
-			PD_4 = state;
-		}
-		else if(pin_num == PIN5)
-		{
-			PD_5 = state;
-		}
-		else if(pin_num == PIN6)
-		{
-			PD_6 = state;
-		}
-		else if(pin_num == PIN7)
-		{
-			PD_7 = state;
-		}
-	}
-	else if(port_num == PORTE)
-	{
-		if(pin_num == PIN0)
-		{
-			PE_0 = state;
-		}
-		else if(pin_num == PIN1)
-		{
-			PE_1 = state;
-		}
-		else if(pin_num == PIN2)
-		{
-			PE_2 = state;
-		}
-		else if(pin_num == PIN3)
-		{
-			PE_3 = state;
-		}
-		else if(pin_num == PIN4)
-		{
-			PE_4 = state;
-		}
-		else if(pin_num == PIN5)
-		{
-			PE_5 = state;
-		}
-		else if(pin_num == PIN6)
-		{
-			PE_6 = state;
-		}
-		else if(pin_num == PIN7)
-		{
-			PE_7 = state;
-		}
+		case PORTA: if(state == ON)
+			{
+				PORTA_DATA |=(1<<pin_num);
+			}
+			else 
+			{
+				PORTA_DATA &=~(1<<pin_num);
+			}
+		            break;
+	  case PORTB: if(state == ON)
+			{
+				PORTB_DATA |=(1<<pin_num);
+			}
+			else 
+			{
+				PORTB_DATA &=~(1<<pin_num);
+			}
+		            break;
+	  case PORTC: if(state == ON)
+			{
+				PORTC_DATA |=(1<<pin_num);
+			}
+			else 
+			{
+				PORTC_DATA &=~(1<<pin_num);
+			}
+		            break;
+		case PORTD: if(state == ON)
+			{
+				PORTD_DATA |=(1<<pin_num);
+			}
+			else 
+			{
+				PORTD_DATA &=~(1<<pin_num);
+			}
+		            break;
+		case PORTE: if(state == ON)
+			{
+				PORTE_DATA |=(1<<pin_num);
+			}
+			else 
+			{
+				PORTE_DATA &=~(1<<pin_num);
+			}
+		            break;
+		case PORTF: if(state == ON)
+			{
+				PORTF_DATA |=(1<<pin_num);
+			}
+			else 
+			{
+				PORTF_DATA &=~(1<<pin_num);
+			}
+		            break;
 	}
 }
 
 uint8_t DIO_pinRead(Port_Num port_num,Pin_Num pin_num)
 {
-	if(port_num == PORTA)
+	switch(port_num)
 	{
-		if(pin_num == PIN0)
-		{
-			return (uint8_t)PA_0 ;
-		}
-		else if(pin_num == PIN1)
-		{
-			return (uint8_t)PA_1;
-		}
-		else if(pin_num == PIN2)
-		{
-			return (uint8_t)PA_2;
-		}
-		else if(pin_num == PIN3)
-		{
-			return (uint8_t)PA_3;
-		}
-		else if(pin_num == PIN4)
-		{
-			return (uint8_t)PA_4;
-		}
-		else if(pin_num == PIN5)
-		{
-			return (uint8_t)PA_5;
-		}
-		else if(pin_num == PIN6)
-		{
-			return (uint8_t)PA_6;
-		}
-		else if(pin_num == PIN7)
-		{
-			return (uint8_t)PA_7;
-		}
+		case PORTA: return (uint8_t)(((1<<pin_num)&PORTA_DATA)>>pin_num);
+		            
+	  case PORTB: return (uint8_t)(((1<<pin_num)&PORTB_DATA)>>pin_num);
+		            
+	  case PORTC: return (uint8_t)(((1<<pin_num)&PORTC_DATA)>>pin_num);
+		            
+		case PORTD: return (uint8_t)(((1<<pin_num)&PORTD_DATA)>>pin_num);
+		            
+		case PORTE: return (uint8_t)(((1<<pin_num)&PORTE_DATA)>>pin_num);
+		           
+		case PORTF: return (uint8_t)(((1<<pin_num)&PORTF_DATA)>>pin_num);
 	}
-	else if(port_num == PORTF)
-	{
-		if(pin_num == PIN0)
-		{
-			return (uint8_t)PF_0 ;
-		}
-		else if(pin_num == PIN1)
-		{
-			return (uint8_t)PF_1;
-		}
-		else if(pin_num == PIN2)
-		{
-			return (uint8_t)PF_2;
-		}
-		else if(pin_num == PIN3)
-		{
-			return (uint8_t)PF_3;
-		}
-		else if(pin_num == PIN4)
-		{
-			return (uint8_t)PF_4;
-		}
-		else if(pin_num == PIN5)
-		{
-			return (uint8_t)PF_5;
-		}
-		else if(pin_num == PIN6)
-		{
-			return (uint8_t)PF_6;
-		}
-		else if(pin_num == PIN7)
-		{
-			return (uint8_t)PF_7;
-		}
-	}
-	else if(port_num == PORTB)
-	{
-		if(pin_num == PIN0)
-		{
-			return (uint8_t)PB_0;
-		}
-		else if(pin_num == PIN1)
-		{
-			return (uint8_t)PB_1;
-		}
-		else if(pin_num == PIN2)
-		{
-			return (uint8_t)PB_2;
-		}
-		else if(pin_num == PIN3)
-		{
-			return (uint8_t)PB_3;
-		}
-		else if(pin_num == PIN4)
-		{
-			return (uint8_t)PB_4;
-		}
-		else if(pin_num == PIN5)
-		{
-			return (uint8_t)PB_5;
-		}
-		else if(pin_num == PIN6)
-		{
-			return (uint8_t)PB_6;
-		}
-		else if(pin_num == PIN7)
-		{
-			return (uint8_t)PB_7;
-		}
-	}
-	else if(port_num == PORTC)
-	{
-		if(pin_num == PIN0)
-		{
-			return (uint8_t)PC_0;
-		}
-		else if(pin_num == PIN1)
-		{
-			return (uint8_t)PC_1;
-		}
-		else if(pin_num == PIN2)
-		{
-			return (uint8_t)PC_2;
-		}
-		else if(pin_num == PIN3)
-		{
-			return (uint8_t)PC_3;
-		}
-		else if(pin_num == PIN4)
-		{
-			return (uint8_t)PC_4;
-		}
-		else if(pin_num == PIN5)
-		{
-			return (uint8_t)PC_5;
-		}
-		else if(pin_num == PIN6)
-		{
-			return (uint8_t)PC_6;
-		}
-		else if(pin_num == PIN7)
-		{
-			return (uint8_t)PC_7;
-		}
-	}
-	else if(port_num == PORTD)
-	{
-		if(pin_num == PIN0)
-		{
-			return (uint8_t)PD_0;
-		}
-		else if(pin_num == PIN1)
-		{
-			return (uint8_t)PD_1;
-		}
-		else if(pin_num == PIN2)
-		{
-			return (uint8_t)PD_2;
-		}
-		else if(pin_num == PIN3)
-		{
-			return (uint8_t)PD_3;
-		}
-		else if(pin_num == PIN4)
-		{
-			return (uint8_t)PD_4;
-		}
-		else if(pin_num == PIN5)
-		{
-			return (uint8_t)PD_5;
-		}
-		else if(pin_num == PIN6)
-		{
-			return (uint8_t)PD_6;
-		}
-		else if(pin_num == PIN7)
-		{
-			return (uint8_t)PD_7;
-		}
-	}
-	else if(port_num == PORTE)
-	{
-		if(pin_num == PIN0)
-		{
-			return (uint8_t)PE_0 ;
-		}
-		else if(pin_num == PIN1)
-		{
-			return (uint8_t)PE_1 ;
-		}
-		else if(pin_num == PIN2)
-		{
-			return (uint8_t)PE_2;
-		}
-		else if(pin_num == PIN3)
-		{
-			return (uint8_t)PE_3;
-		}
-		else if(pin_num == PIN4)
-		{
-			return (uint8_t)PE_4 ;
-		}
-		else if(pin_num == PIN5)
-		{
-			return (uint8_t)PE_5;
-		}
-		else if(pin_num == PIN6)
-		{
-			return (uint8_t)PE_6;
-		}
-		else if(pin_num == PIN7)
-		{
-			return (uint8_t)PE_7 ;
-		}
-	} 
-	return 255;
 }
