@@ -2,7 +2,7 @@
 #define DIO_H
 
 #include "../../common/std_type.h" 
-#include "../../common/reg.h"
+
 typedef enum
 {
 	PORTA =0,PORTB =1,PORTC =2,PORTD =3,PORTE =4, PORTF =5

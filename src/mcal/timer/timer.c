@@ -32,11 +32,11 @@ void TIMER_init(Timer_Init* timx)
 
 void TIMER_start(Timer_Num num,Timer_Type type)
 {
-	if(num == T0 && type == TA)
+	if((num == T0) && (type == TA))
 	{
 		TIMER0_CTL=0x01;                        /* enable timer0 A to start */
 	}  
-  else if(num == T0 && type == TB)
+  else if((num == T0) && (type == TB))
 	{
 		TIMER0_CTL=0x80;                        /* enable timer0 B to start */
 	}                                   
@@ -44,11 +44,11 @@ void TIMER_start(Timer_Num num,Timer_Type type)
 
 void TIMER_stop(Timer_Num num,Timer_Type type)
 {
-	if(num == T0 && type == TA)
+	if((num == T0) && (type == TA))
 	{
 		TIMER0_CTL &=0xFFFFFFFE;                        /* disable timer0 A  */
 	}  
-  else if(num == T0 && type == TB)
+  else if((num == T0) && (type == TB))
 	{
 		TIMER0_CTL=0xFFFFFF7F;                          /* disable timer0 B  */
 	}

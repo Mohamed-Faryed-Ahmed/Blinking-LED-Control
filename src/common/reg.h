@@ -1,17 +1,21 @@
 #ifndef REG_H
 #define REG_H 
 
-#include"std_type.h"
+#include "std_type.h"
 
-#define BP (0U)
+#define GPIO_AHB (0U)
+#define BP       (1U)
 /******************************************************************************
 *                           MOdel_CLOCK                                       *
 ******************************************************************************/
 
-#define CLOCK_PORT  (*((volatile uint32_t* const)(0x400FE000 + 0x608)))
-#define GPIO_HBCTL  (*((volatile uint32_t* const)(0x400FE000 + 0x06C)))
-#define RCGC_TIMER  (*((volatile uint32_t* const)(0x400FE000 + 0x604)))
+#define CLOCK_PORT                (*((volatile uint32_t*)(0x400FE000 + 0x608)))
+#define GPIO_HBCTL                (*((volatile uint32_t*)(0x400FE000 + 0x06C)))
+#define RCGC_TIMER                (*((volatile uint32_t*)(0x400FE000 + 0x604)))
+#define SYSCTL_REGCGC2            (*((volatile unsigned long *)0x400FE108))
 
+
+#if (GPIO_AHB == 1)
 /******************************************************************************
 *                           GPIO_PORT_DATA                                    *
 *******************************************************************************/
@@ -23,7 +27,7 @@
 #define PORTF_DATA (*((volatile uint32_t *)(0x4005D000 + 0x3fc)))
 
 
-#if BP
+#if (BP ==1)
 /******************************************************************************
 *                           GPIO_PORTA_DATA_PIN                               *
 *******************************************************************************/
@@ -91,8 +95,8 @@
 #define PF_5 (*((volatile uint32_t *)(0x4005D000 + 0x080)))
 #define PF_6 (*((volatile uint32_t *)(0x4005D000 + 0x100)))
 #define PF_7 (*((volatile uint32_t *)(0x4005D000 + 0x200)))
-
 #endif
+
 /******************************************************************************
 *                           GPIO_DIR                                          *
 *******************************************************************************/
@@ -106,12 +110,12 @@
 /******************************************************************************
 *                           GPIO_ Interrupt Sense                             *
 *******************************************************************************/
-#define PORTA_OIS   (*((volatile uint32_t *)(0x40058000 + 0x404 )))
-#define PORTB_OIS   (*((volatile uint32_t *)(0x40059000 + 0x404 )))
-#define PORTC_OIS   (*((volatile uint32_t *)(0x4005A000 + 0x404 )))
-#define PORTD_OIS   (*((volatile uint32_t *)(0x4005B000 + 0x404 )))
-#define PORTE_OIS   (*((volatile uint32_t *)(0x4005C000 + 0x404 )))
-#define PORTF_OIS   (*((volatile uint32_t *)(0x4005D000 + 0x404 )))
+#define PORTA_IS   (*((volatile uint32_t *)(0x40058000 + 0x404 )))
+#define PORTB_IS   (*((volatile uint32_t *)(0x40059000 + 0x404 )))
+#define PORTC_IS   (*((volatile uint32_t *)(0x4005A000 + 0x404 )))
+#define PORTD_IS   (*((volatile uint32_t *)(0x4005B000 + 0x404 )))
+#define PORTE_IS   (*((volatile uint32_t *)(0x4005C000 + 0x404 )))
+#define PORTF_IS   (*((volatile uint32_t *)(0x4005D000 + 0x404 )))
 
 /******************************************************************************
 *                           GPIO Interrupt Both Edges                         *
@@ -242,77 +246,276 @@
 #define PORTE_PCTL  (*((volatile uint32_t *)(0x4005C000 + 0x52C )))
 #define PORTF_PCTL  (*((volatile uint32_t *)(0x4005D000 + 0x52C )))
 
+#elif (GPIO_AHB == 0)
+/*****************************************************************************
+GPIO registers (PORTA)                                                       *
+*****************************************************************************/
+#define PORTA_DATA       (*((volatile unsigned long *)0x400043FC))
+#define PORTA_DIR        (*((volatile unsigned long *)0x40004400))
+#define PORTA_AFSEL      (*((volatile unsigned long *)0x40004420))
+#define PORTA_PUR        (*((volatile unsigned long *)0x40004510))
+#define PORTA_PDR        (*((volatile unsigned long *)0x40004514))
+#define PORTA_EN         (*((volatile unsigned long *)0x4000451C))
+#define PORTA_LOCK       (*((volatile unsigned long *)0x40004520))
+#define PORTA_CR         (*((volatile unsigned long *)0x40004524))
+#define PORTA_AMSEL      (*((volatile unsigned long *)0x40004528))
+#define PORTA_PCTL       (*((volatile unsigned long *)0x4000452C))
+
+/* PORTA External Interrupts Registers */
+#define PORTA_IS         (*((volatile unsigned long *)0x40004404))
+#define PORTA_IBE        (*((volatile unsigned long *)0x40004408))
+#define PORTA_IEV        (*((volatile unsigned long *)0x4000440C))
+#define PORTA_IM         (*((volatile unsigned long *)0x40004410))
+#define PORTA_RIS        (*((volatile unsigned long *)0x40004414))
+#define PORTA_ICR        (*((volatile unsigned long *)0x4000441C))
+
+/*****************************************************************************
+GPIO registers (PORTB)
+*****************************************************************************/
+#define PORTB_DATA        (*((volatile unsigned long *)0x400053FC))
+#define PORTB_DIR         (*((volatile unsigned long *)0x40005400))
+#define PORTB_AFSEL       (*((volatile unsigned long *)0x40005420))
+#define PORTB_PUR         (*((volatile unsigned long *)0x40005510))
+#define PORTB_PDR         (*((volatile unsigned long *)0x40005514))
+#define PORTB_EN          (*((volatile unsigned long *)0x4000551C))
+#define PORTB_LOCK        (*((volatile unsigned long *)0x40005520))
+#define PORTB_CR          (*((volatile unsigned long *)0x40005524))
+#define PORTB_AMSEL       (*((volatile unsigned long *)0x40005528))
+#define PORTB_PCTL        (*((volatile unsigned long *)0x4000552C))
+
+/* PORTB External Interrupts Registers */
+#define PORTB_IS          (*((volatile unsigned long *)0x40005404))
+#define PORTB_IBE         (*((volatile unsigned long *)0x40005408))
+#define PORTB_IEV         (*((volatile unsigned long *)0x4000540C))
+#define PORTB_IM          (*((volatile unsigned long *)0x40005410))
+#define PORTB_RIS         (*((volatile unsigned long *)0x40005414))
+#define PORTB_ICR         (*((volatile unsigned long *)0x4000541C))
+
+/*****************************************************************************
+GPIO registers (PORTC)
+*****************************************************************************/
+#define PORTC_DATA        (*((volatile unsigned long *)0x400063FC))
+#define PORTC_DIR         (*((volatile unsigned long *)0x40006400))
+#define PORTC_AFSEL       (*((volatile unsigned long *)0x40006420))
+#define PORTC_PUR         (*((volatile unsigned long *)0x40006510))
+#define PORTC_PDR         (*((volatile unsigned long *)0x40006514))
+#define PORTC_EN          (*((volatile unsigned long *)0x4000651C))
+#define PORTC_LOCK        (*((volatile unsigned long *)0x40006520))
+#define PORTC_CR          (*((volatile unsigned long *)0x40006524))
+#define PORTC_AMSEL       (*((volatile unsigned long *)0x40006528))
+#define PORTC_PCTL        (*((volatile unsigned long *)0x4000652C))
+
+/* PORTC External Interrupts Registers */
+#define PORTC_IS          (*((volatile unsigned long *)0x40006404))
+#define PORTC_IBE         (*((volatile unsigned long *)0x40006408))
+#define PORTC_IEV         (*((volatile unsigned long *)0x4000640C))
+#define PORTC_IM          (*((volatile unsigned long *)0x40006410))
+#define PORTC_RIS         (*((volatile unsigned long *)0x40006414))
+#define PORTC_ICR         (*((volatile unsigned long *)0x4000641C))
+
+/*****************************************************************************
+GPIO registers (PORTD)
+*****************************************************************************/
+#define PORTD_DATA        (*((volatile unsigned long *)0x400073FC))
+#define PORTD_DIR         (*((volatile unsigned long *)0x40007400))
+#define PORTD_AFSEL       (*((volatile unsigned long *)0x40007420))
+#define PORTD_PUR         (*((volatile unsigned long *)0x40007510))
+#define PORTD_PDR         (*((volatile unsigned long *)0x40007514))
+#define PORTD_EN          (*((volatile unsigned long *)0x4000751C))
+#define PORTD_LOCK        (*((volatile unsigned long *)0x40007520))
+#define PORTD_CR          (*((volatile unsigned long *)0x40007524))
+#define PORTD_AMSEL       (*((volatile unsigned long *)0x40007528))
+#define PORTD_PCTL        (*((volatile unsigned long *)0x4000752C))
+
+/* PORTD External Interrupts Registers */
+#define PORTD_IS          (*((volatile unsigned long *)0x40007404))
+#define PORTD_IBE         (*((volatile unsigned long *)0x40007408))
+#define PORTD_IEV         (*((volatile unsigned long *)0x4000740C))
+#define PORTD_IM          (*((volatile unsigned long *)0x40007410))
+#define PORTD_RIS         (*((volatile unsigned long *)0x40007414))
+#define PORTD_ICR         (*((volatile unsigned long *)0x4000741C))
+
+/*****************************************************************************
+GPIO registers (PORTE)
+*****************************************************************************/
+#define PORTE_DATA        (*((volatile unsigned long *)0x400243FC))
+#define PORTE_DIR         (*((volatile unsigned long *)0x40024400))
+#define PORTE_AFSEL       (*((volatile unsigned long *)0x40024420))
+#define PORTE_PUR         (*((volatile unsigned long *)0x40024510))
+#define PORTE_PDR         (*((volatile unsigned long *)0x40024514))
+#define PORTE_EN          (*((volatile unsigned long *)0x4002451C))
+#define PORTE_LOCK        (*((volatile unsigned long *)0x40024520))
+#define PORTE_CR          (*((volatile unsigned long *)0x40024524))
+#define PORTE_AMSEL       (*((volatile unsigned long *)0x40024528))
+#define PORTE_PCTL        (*((volatile unsigned long *)0x4002452C))
+
+/* PORTE External Interrupts Registers */
+#define PORTE_IS          (*((volatile unsigned long *)0x40024404))
+#define PORTE_IBE         (*((volatile unsigned long *)0x40024408))
+#define PORTE_IEV         (*((volatile unsigned long *)0x4002440C))
+#define PORTE_IM          (*((volatile unsigned long *)0x40024410))
+#define PORTE_RIS         (*((volatile unsigned long *)0x40024414))
+#define PORTE_ICR         (*((volatile unsigned long *)0x4002441C))
+
+/*****************************************************************************
+GPIO registers (PORTF)
+*****************************************************************************/
+#define PORTF_DATA        (*((volatile unsigned long *)0x400253FC))
+#define PORTF_DIR         (*((volatile unsigned long *)0x40025400))
+#define PORTF_AFSEL       (*((volatile unsigned long *)0x40025420))
+#define PORTF_PUR         (*((volatile unsigned long *)0x40025510))
+#define PORTF_PDR         (*((volatile unsigned long *)0x40025514))
+#define PORTF_EN          (*((volatile unsigned long *)0x4002551C))
+#define PORTF_LOCK        (*((volatile unsigned long *)0x40025520))
+#define PORTF_CR          (*((volatile unsigned long *)0x40025524))
+#define PORTF_AMSEL       (*((volatile unsigned long *)0x40025528))
+#define PORTF_PCTL        (*((volatile unsigned long *)0x4002552C))
+
+/* PORTF External Interrupts Registers */
+#define PORTF_IS          (*((volatile unsigned long *)0x40025404))
+#define PORTF_IBE         (*((volatile unsigned long *)0x40025408))
+#define PORTF_IEV         (*((volatile unsigned long *)0x4002540C))
+#define PORTF_IM          (*((volatile unsigned long *)0x40025410))
+#define PORTF_RIS         (*((volatile unsigned long *)0x40025414))
+#define PORTF_ICR         (*((volatile unsigned long *)0x4002541C))
+	
+#if (BP == 1)
+/******************************************************************************
+*                           GPIO_PORTA_DATA_PIN                               *
+*******************************************************************************/
+#define PA_0 (*((volatile uint32_t *)(0x40004000 + 0x04)))  
+#define PA_1 (*((volatile uint32_t *)(0x40004000 + 0x08)))
+#define PA_2 (*((volatile uint32_t *)(0x40004000 + 0x10)))
+#define PA_3 (*((volatile uint32_t *)(0x40004000 + 0x20)))
+#define PA_4 (*((volatile uint32_t *)(0x40004000 + 0x40)))
+#define PA_5 (*((volatile uint32_t *)(0x40004000 + 0x80)))
+#define PA_6 (*((volatile uint32_t *)(0x40004000 + 0x100)))
+#define PA_7 (*((volatile uint32_t *)(0x40004000 + 0x200)))
+/******************************************************************************
+*                           GPIO_PORTB_DATA_PIN                               *
+*******************************************************************************/
+#define PB_0 (*((volatile uint32_t *)(0x40005000 + 0x004)))  
+#define PB_1 (*((volatile uint32_t *)(0x40005000 + 0x008)))
+#define PB_2 (*((volatile uint32_t *)(0x40005000 + 0x010)))
+#define PB_3 (*((volatile uint32_t *)(0x40005000 + 0x020)))
+#define PB_4 (*((volatile uint32_t *)(0x40005000 + 0x040)))
+#define PB_5 (*((volatile uint32_t *)(0x40005000 + 0x080)))
+#define PB_6 (*((volatile uint32_t *)(0x40005000 + 0x100)))
+#define PB_7 (*((volatile uint32_t *)(0x40005000 + 0x200)))
+/******************************************************************************
+*                           GPIO_PORTC_DATA_PIN                               *
+*******************************************************************************/
+#define PC_0 (*((volatile uint32_t *)(0x40006000 + 0x004)))  
+#define PC_1 (*((volatile uint32_t *)(0x40006000 + 0x008)))
+#define PC_2 (*((volatile uint32_t *)(0x40006000 + 0x010)))
+#define PC_3 (*((volatile uint32_t *)(0x40006000 + 0x020)))
+#define PC_4 (*((volatile uint32_t *)(0x40006000 + 0x040)))
+#define PC_5 (*((volatile uint32_t *)(0x40006000 + 0x080)))
+#define PC_6 (*((volatile uint32_t *)(0x40006000 + 0x100)))
+#define PC_7 (*((volatile uint32_t *)(0x40006000 + 0x200)))
+/******************************************************************************
+*                           GPIO_PORTD_DATA_PIN                               *
+*******************************************************************************/
+#define PD_0 (*((volatile uint32_t *)(0x40007000 + 0x004)))  
+#define PD_1 (*((volatile uint32_t *)(0x40007000 + 0x008)))
+#define PD_2 (*((volatile uint32_t *)(0x40007000 + 0x010)))
+#define PD_3 (*((volatile uint32_t *)(0x40007000 + 0x020)))
+#define PD_4 (*((volatile uint32_t *)(0x40007000 + 0x040)))
+#define PD_5 (*((volatile uint32_t *)(0x40007000 + 0x080)))
+#define PD_6 (*((volatile uint32_t *)(0x40007000 + 0x100)))
+#define PD_7 (*((volatile uint32_t *)(0x40007000 + 0x200)))
+/******************************************************************************
+*                           GPIO_PORTE_DATA_PIN                               *
+*******************************************************************************/
+#define PE_0 (*((volatile uint32_t *)(0x40024000 + 0x004)))  
+#define PE_1 (*((volatile uint32_t *)(0x40024000 + 0x008)))
+#define PE_2 (*((volatile uint32_t *)(0x40024000 + 0x010)))
+#define PE_3 (*((volatile uint32_t *)(0x40024000 + 0x020)))
+#define PE_4 (*((volatile uint32_t *)(0x40024000 + 0x040)))
+#define PE_5 (*((volatile uint32_t *)(0x40024000 + 0x080)))
+
+/******************************************************************************
+*                           GPIO_PORTF_DATA_PIN                               *
+*******************************************************************************/
+#define PF_0 (*((volatile uint32_t *)(0x40025000 + 0x04)))  
+#define PF_1 (*((volatile uint32_t *)(0x40025000 + 0x08)))
+#define PF_2 (*((volatile uint32_t *)(0x40025000 + 0x10)))
+#define PF_3 (*((volatile uint32_t *)(0x40025000 + 0x20)))
+#define PF_4 (*((volatile uint32_t *)(0x40025000 + 0x40)))
+#endif
+
+#endif
 
 /*****************************************************************************
 *                           Systick Timer Registers                          *
 *****************************************************************************/
-#define SYSTICK_CTRL_REG          (*((volatile unsigned long *)0xE000E010))
-#define SYSTICK_RELOAD_REG        (*((volatile unsigned long *)0xE000E014))
-#define SYSTICK_CURRENT_REG       (*((volatile unsigned long *)0xE000E018))
+#define SYSTICK_CTRL           (*((volatile unsigned long *)0xE000E010))
+#define SYSTICK_RELOAD         (*((volatile unsigned long *)0xE000E014))
+#define SYSTICK_CURRENT        (*((volatile unsigned long *)0xE000E018))
 
 /*****************************************************************************
 *                           PLL Registers                                    *
 *****************************************************************************/
-#define SYSCTL_RIS_REG            (*((volatile unsigned long *)0x400FE050))
-#define SYSCTL_RCC_REG            (*((volatile unsigned long *)0x400FE060))
-#define SYSCTL_RCC2_REG           (*((volatile unsigned long *)0x400FE070))
+#define SYSCTL_RIS             (*((volatile unsigned long *)0x400FE050))
+#define SYSCTL_RCC             (*((volatile unsigned long *)0x400FE060))
+#define SYSCTL_RCC2            (*((volatile unsigned long *)0x400FE070))
 
 /*****************************************************************************
 *                           NVIC Registers                                   *
 *****************************************************************************/
-#define NVIC_PRI0_REG             (*((volatile unsigned long *)0xE000E400))
-#define NVIC_PRI1_REG             (*((volatile unsigned long *)0xE000E404))
-#define NVIC_PRI2_REG             (*((volatile unsigned long *)0xE000E408))
-#define NVIC_PRI3_REG             (*((volatile unsigned long *)0xE000E40C))
-#define NVIC_PRI4_REG             (*((volatile unsigned long *)0xE000E410))
-#define NVIC_PRI5_REG             (*((volatile unsigned long *)0xE000E414))
-#define NVIC_PRI6_REG             (*((volatile unsigned long *)0xE000E418))
-#define NVIC_PRI7_REG             (*((volatile unsigned long *)0xE000E41C))
-#define NVIC_PRI8_REG             (*((volatile unsigned long *)0xE000E420))
-#define NVIC_PRI9_REG             (*((volatile unsigned long *)0xE000E424))
-#define NVIC_PRI10_REG            (*((volatile unsigned long *)0xE000E428))
-#define NVIC_PRI11_REG            (*((volatile unsigned long *)0xE000E42C))
-#define NVIC_PRI12_REG            (*((volatile unsigned long *)0xE000E430))
-#define NVIC_PRI13_REG            (*((volatile unsigned long *)0xE000E434))
-#define NVIC_PRI14_REG            (*((volatile unsigned long *)0xE000E438))
-#define NVIC_PRI15_REG            (*((volatile unsigned long *)0xE000E43C))
-#define NVIC_PRI16_REG            (*((volatile unsigned long *)0xE000E440))
-#define NVIC_PRI17_REG            (*((volatile unsigned long *)0xE000E444))
-#define NVIC_PRI18_REG            (*((volatile unsigned long *)0xE000E448))
-#define NVIC_PRI19_REG            (*((volatile unsigned long *)0xE000E44C))
-#define NVIC_PRI20_REG            (*((volatile unsigned long *)0xE000E450))
-#define NVIC_PRI21_REG            (*((volatile unsigned long *)0xE000E454))
-#define NVIC_PRI22_REG            (*((volatile unsigned long *)0xE000E458))
-#define NVIC_PRI23_REG            (*((volatile unsigned long *)0xE000E45C))
-#define NVIC_PRI24_REG            (*((volatile unsigned long *)0xE000E460))
-#define NVIC_PRI25_REG            (*((volatile unsigned long *)0xE000E464))
-#define NVIC_PRI26_REG            (*((volatile unsigned long *)0xE000E468))
-#define NVIC_PRI27_REG            (*((volatile unsigned long *)0xE000E46C))
-#define NVIC_PRI28_REG            (*((volatile unsigned long *)0xE000E470))
-#define NVIC_PRI29_REG            (*((volatile unsigned long *)0xE000E474))
-#define NVIC_PRI30_REG            (*((volatile unsigned long *)0xE000E478))
-#define NVIC_PRI31_REG            (*((volatile unsigned long *)0xE000E47C))
-#define NVIC_PRI32_REG            (*((volatile unsigned long *)0xE000E480))
-#define NVIC_PRI33_REG            (*((volatile unsigned long *)0xE000E484))
-#define NVIC_PRI34_REG            (*((volatile unsigned long *)0xE000E488))
+#define NVIC_PRI0              (*((volatile unsigned long *)0xE000E400))
+#define NVIC_PRI1              (*((volatile unsigned long *)0xE000E404))
+#define NVIC_PRI2              (*((volatile unsigned long *)0xE000E408))
+#define NVIC_PRI3              (*((volatile unsigned long *)0xE000E40C))
+#define NVIC_PRI4              (*((volatile unsigned long *)0xE000E410))
+#define NVIC_PRI5              (*((volatile unsigned long *)0xE000E414))
+#define NVIC_PRI6              (*((volatile unsigned long *)0xE000E418))
+#define NVIC_PRI7              (*((volatile unsigned long *)0xE000E41C))
+#define NVIC_PRI8              (*((volatile unsigned long *)0xE000E420))
+#define NVIC_PRI9              (*((volatile unsigned long *)0xE000E424))
+#define NVIC_PRI10             (*((volatile unsigned long *)0xE000E428))
+#define NVIC_PRI11             (*((volatile unsigned long *)0xE000E42C))
+#define NVIC_PRI12             (*((volatile unsigned long *)0xE000E430))
+#define NVIC_PRI13             (*((volatile unsigned long *)0xE000E434))
+#define NVIC_PRI14             (*((volatile unsigned long *)0xE000E438))
+#define NVIC_PRI15             (*((volatile unsigned long *)0xE000E43C))
+#define NVIC_PRI16             (*((volatile unsigned long *)0xE000E440))
+#define NVIC_PRI17             (*((volatile unsigned long *)0xE000E444))
+#define NVIC_PRI18             (*((volatile unsigned long *)0xE000E448))
+#define NVIC_PRI19             (*((volatile unsigned long *)0xE000E44C))
+#define NVIC_PRI20             (*((volatile unsigned long *)0xE000E450))
+#define NVIC_PRI21             (*((volatile unsigned long *)0xE000E454))
+#define NVIC_PRI22             (*((volatile unsigned long *)0xE000E458))
+#define NVIC_PRI23             (*((volatile unsigned long *)0xE000E45C))
+#define NVIC_PRI24             (*((volatile unsigned long *)0xE000E460))
+#define NVIC_PRI25             (*((volatile unsigned long *)0xE000E464))
+#define NVIC_PRI26             (*((volatile unsigned long *)0xE000E468))
+#define NVIC_PRI27             (*((volatile unsigned long *)0xE000E46C))
+#define NVIC_PRI28             (*((volatile unsigned long *)0xE000E470))
+#define NVIC_PRI29             (*((volatile unsigned long *)0xE000E474))
+#define NVIC_PRI30             (*((volatile unsigned long *)0xE000E478))
+#define NVIC_PRI31             (*((volatile unsigned long *)0xE000E47C))
+#define NVIC_PRI32             (*((volatile unsigned long *)0xE000E480))
+#define NVIC_PRI33             (*((volatile unsigned long *)0xE000E484))
+#define NVIC_PRI34             (*((volatile unsigned long *)0xE000E488))
 
-#define NVIC_EN0_REG              (*((volatile unsigned long *)0xE000E100))
-#define NVIC_EN1_REG              (*((volatile unsigned long *)0xE000E104))
-#define NVIC_EN2_REG              (*((volatile unsigned long *)0xE000E108))
-#define NVIC_EN3_REG              (*((volatile unsigned long *)0xE000E10C))
-#define NVIC_EN4_REG              (*((volatile unsigned long *)0xE000E110))
-#define NVIC_DIS0_REG             (*((volatile unsigned long *)0xE000E180))
-#define NVIC_DIS1_REG             (*((volatile unsigned long *)0xE000E184))
-#define NVIC_DIS2_REG             (*((volatile unsigned long *)0xE000E188))
-#define NVIC_DIS3_REG             (*((volatile unsigned long *)0xE000E18C))
-#define NVIC_DIS4_REG             (*((volatile unsigned long *)0xE000E190))
+#define NVIC_EN0               (*((volatile unsigned long *)0xE000E100))
+#define NVIC_EN1               (*((volatile unsigned long *)0xE000E104))
+#define NVIC_EN2               (*((volatile unsigned long *)0xE000E108))
+#define NVIC_EN3               (*((volatile unsigned long *)0xE000E10C))
+#define NVIC_EN4               (*((volatile unsigned long *)0xE000E110))
+#define NVIC_DIS0              (*((volatile unsigned long *)0xE000E180))
+#define NVIC_DIS1              (*((volatile unsigned long *)0xE000E184))
+#define NVIC_DIS2              (*((volatile unsigned long *)0xE000E188))
+#define NVIC_DIS3              (*((volatile unsigned long *)0xE000E18C))
+#define NVIC_DIS4              (*((volatile unsigned long *)0xE000E190))
 
 /*****************************************************************************
 *                           SCB Registers                                    *
 *****************************************************************************/
-#define NVIC_SYSTEM_PRI1_REG      (*((volatile unsigned long *)0xE000ED18))
-#define NVIC_SYSTEM_PRI2_REG      (*((volatile unsigned long *)0xE000ED1C))
-#define NVIC_SYSTEM_PRI3_REG      (*((volatile unsigned long *)0xE000ED20))
+#define NVIC_SYSTEM_PRI1          (*((volatile unsigned long *)0xE000ED18))
+#define NVIC_SYSTEM_PRI2          (*((volatile unsigned long *)0xE000ED1C))
+#define NVIC_SYSTEM_PRI3          (*((volatile unsigned long *)0xE000ED20))
 #define NVIC_SYSTEM_SYSHNDCTRL    (*((volatile unsigned long *)0xE000ED24))
 #define NVIC_SYSTEM_INTCTRL       (*((volatile unsigned long *)0xE000ED04))
 #define NVIC_SYSTEM_CFGCTRL       (*((volatile unsigned long *)0xE000ED14))
@@ -320,17 +523,17 @@
 /*****************************************************************************
 *                            MPU Registers                                   *
 *****************************************************************************/
-#define MPU_TYPE_REG              (*((volatile unsigned long *)0xE000ED90))
-#define MPU_CTRL_REG              (*((volatile unsigned long *)0xE000ED94))
-#define MPU_NUMBER_REG            (*((volatile unsigned long *)0xE000ED98))
-#define MPU_BASE_REG              (*((volatile unsigned long *)0xE000ED9C))
-#define MPU_ATTR_REG              (*((volatile unsigned long *)0xE000EDA0))
-#define MPU_BASE1_REG             (*((volatile unsigned long *)0xE000EDA4))
-#define MPU_ATTR1_REG             (*((volatile unsigned long *)0xE000EDA8))
-#define MPU_BASE2_REG             (*((volatile unsigned long *)0xE000EDAC))
-#define MPU_ATTR2_REG             (*((volatile unsigned long *)0xE000EDB0))
-#define MPU_BASE3_REG             (*((volatile unsigned long *)0xE000EDB4))
-#define MPU_ATTR3_REG             (*((volatile unsigned long *)0xE000EDB8))
+#define MPU_TYPE               (*((volatile unsigned long *)0xE000ED90))
+#define MPU_CTRL               (*((volatile unsigned long *)0xE000ED94))
+#define MPU_NUMBER             (*((volatile unsigned long *)0xE000ED98))
+#define MPU_BASE               (*((volatile unsigned long *)0xE000ED9C))
+#define MPU_ATTR               (*((volatile unsigned long *)0xE000EDA0))
+#define MPU_BASE1              (*((volatile unsigned long *)0xE000EDA4))
+#define MPU_ATTR1              (*((volatile unsigned long *)0xE000EDA8))
+#define MPU_BASE2              (*((volatile unsigned long *)0xE000EDAC))
+#define MPU_ATTR2              (*((volatile unsigned long *)0xE000EDB0))
+#define MPU_BASE3              (*((volatile unsigned long *)0xE000EDB4))
+#define MPU_ATTR3              (*((volatile unsigned long *)0xE000EDB8))
 
 /*****************************************************************************
 *                           TIMER MODE                                       *

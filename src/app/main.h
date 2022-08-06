@@ -3,8 +3,8 @@
 #include  "../common/std_type.h"
 
 
-#define T_ON  (1U) /* led on for 2S */
-#define T_OFF (3U) /* led off for 4S */
+#define T_ON  (1U) /* led on for  1S */
+#define T_OFF (3U) /* led off for 3S */
 
 
 void callBack (void);
