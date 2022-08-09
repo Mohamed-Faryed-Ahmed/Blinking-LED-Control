@@ -4,7 +4,7 @@
 
 
 #define T_ON  (1U) /* led on for  1S */
-#define T_OFF (3U) /* led off for 3S */
+#define T_OFF (1U) /* led off for 1S */
 
 
 void callBack (void);

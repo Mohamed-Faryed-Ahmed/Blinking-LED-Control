@@ -17,6 +17,8 @@
 /*
 #include "../mcal/timer/timer.h"
 */
+void static PWM_led(uint8_t time_on,uint8_t time_off);
+
 
 static uint8_t ticks=0;
 
@@ -44,23 +46,32 @@ int main()
     {
       led_On(PORTF,PIN3);
     }
+		PWM_led(T_ON,T_OFF);
   }
 }
 /******************************************************************************************
-*  Func name:  Callback FUNC                                                              *
-*  Discr    :  turn on led for 1second then turn on led for 3second                       * 
+*  Func name:  PWM_LED FUNC                                                                *
+*  Discr    :  turn on /turn off led                                                       * 
 *******************************************************************************************/
-void callBack (void)
+void static PWM_led(uint8_t time_on,uint8_t time_off)
 {
-	ticks++;
-	if((ticks >= T_ON) && (ticks <(T_ON + T_OFF)))
+	if((ticks >= time_on) && (ticks <(time_on + time_off)))
 	{
 		led_Off(PORTF,PIN2);
 	}
-	else if(ticks >= (T_ON + T_OFF) )
+	else if(ticks >= (time_on + time_off) )
 	{
 		led_On(PORTF,PIN2);
 		ticks = 0;
 	}
+}
+
+/******************************************************************************************
+*  Func name:  Callback FUNC                                                              *
+*  Discr    :  inceement  ticks                                                           * 
+*******************************************************************************************/
+void callBack (void)
+{
+	ticks++;
 }
 
